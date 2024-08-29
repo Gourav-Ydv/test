@@ -2,10 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=whatsapp://send?phone=917376797547&text=Hello%2C%20I%27m%20interested%20in%20your%20zero%20investment%20work">
     <title>Redirecting...</title>
+    <script type="text/javascript">
+        function redirectToLandingPage() {
+            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            if (/android/i.test(userAgent)) {
+                // Redirect to the landing page in the parent directory and open in Chrome
+                window.location.href = "intent://gourav-ydv.github.io/test.htm/land.html#Intent;scheme=https;package=com.android.chrome;end";
+            } else {
+                // Redirect to the landing page in the parent directory
+                window.location.href = "https://192.168.31.245:5500/landing.html";
+            }
+        }
+        window.onload = redirectToLandingPage;
+    </script>
 </head>
 <body>
-    <p>If you are not redirected, <a href="whatsapp://send?phone=917376797547&text=Hello%2C%20I%27m%20interested%20in%20your%20zero%20investment%20work">click here</a>.</p>
+    <p>If you are not redirected, <a href="../landing.html">click here</a>.</p>
 </body>
 </html>
