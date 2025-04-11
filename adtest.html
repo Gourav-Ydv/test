@@ -2,63 +2,65 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ad Test Page</title>
+  <title>Ad Block Test</title>
 
-  <!-- FAKE Ad script (will trigger adblockers) -->
+  <!-- Real Ad script (triggers uBlock) -->
   <script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <script src="/ads/script.js"></script>
+
+  <!-- Bait for adblock lists -->
+  <script src="/advertising/script.js"></script>
+  <script src="/banner-ads/tracker.js"></script>
 
   <style>
-    body {
-      font-family: sans-serif;
-      background-color: #f7f7f7;
-      padding: 2rem;
-      text-align: center;
-    }
-
-    .ad-banner, .ad-container, .sponsor-box {
+    .adsbygoogle,
+    .ad-banner,
+    .ads,
+    #sponsored,
+    .promo-box,
+    .sponsor-container,
+    .advert,
+    .adunit,
+    .adzone {
       width: 300px;
       height: 250px;
-      background: #ddd;
-      margin: 1rem auto;
-      border: 2px dashed #999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
+      margin: 20px auto;
+      background: #eee;
+      text-align: center;
+      padding-top: 100px;
+      font-size: 1.2em;
+      border: 3px dashed #999;
     }
 
     #adtest {
-      width: 1px;
       height: 1px;
-      visibility: hidden;
+      width: 1px;
       position: absolute;
+      visibility: hidden;
     }
   </style>
 </head>
 <body>
 
-  <h1>This is a Test Page for Adblockers</h1>
+  <h1>This Page Should Trigger Ad Blockers</h1>
 
-  <!-- Bait Ad Elements -->
-  <div class="ad-banner">Ad Banner 1</div>
-  <div class="ad-container">Ad Container 2</div>
-  <div class="sponsor-box">Sponsored Content</div>
+  <!-- Bait ad elements -->
+  <div class="adsbygoogle">Google Ad</div>
+  <div class="ad-banner">Ad Banner</div>
+  <div class="ads">Advertisement Section</div>
+  <div id="sponsored">Sponsored Section</div>
+  <div class="promo-box">Promo Content</div>
 
-  <!-- Invisible bait div -->
+  <!-- Hidden detection bait -->
   <div id="adtest" class="adsbox"></div>
 
   <script>
-    // Adblock detection logic
+    // Detect if adblocker removed the bait
     window.addEventListener('load', function () {
       const bait = document.getElementById('adtest');
       const isBlocked = bait && bait.offsetHeight === 0;
 
       if (isBlocked) {
-        alert("Adblocker Detected! Some content may be hidden.");
-        // Or redirect:
-        // window.location.href = "/adblock-warning.html";
+        document.body.innerHTML = "<h1>Adblocker Detected — Access Restricted</h1>";
       }
     });
   </script>
