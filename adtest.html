@@ -1,69 +1,14 @@
+<!-- adshort.glitch.me -->
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Ad Block Test</title>
-
-  <!-- Real Ad script (triggers uBlock) -->
-  <script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-  <!-- Bait for adblock lists -->
-  <script src="/advertising/script.js"></script>
-  <script src="/banner-ads/tracker.js"></script>
-
-  <style>
-    .adsbygoogle,
-    .ad-banner,
-    .ads,
-    #sponsored,
-    .promo-box,
-    .sponsor-container,
-    .advert,
-    .adunit,
-    .adzone {
-      width: 300px;
-      height: 250px;
-      margin: 20px auto;
-      background: #eee;
-      text-align: center;
-      padding-top: 100px;
-      font-size: 1.2em;
-      border: 3px dashed #999;
-    }
-
-    #adtest {
-      height: 1px;
-      width: 1px;
-      position: absolute;
-      visibility: hidden;
-    }
-  </style>
-</head>
-<body>
-
-  <h1>This Page Should Trigger Ad Blockers</h1>
-
-  <!-- Bait ad elements -->
-  <div class="adsbygoogle">Google Ad</div>
-  <div class="ad-banner">Ad Banner</div>
-  <div class="ads">Advertisement Section</div>
-  <div id="sponsored">Sponsored Section</div>
-  <div class="promo-box">Promo Content</div>
-
-  <!-- Hidden detection bait -->
-  <div id="adtest" class="adsbox"></div>
-
-  <script>
-    // Detect if adblocker removed the bait
-    window.addEventListener('load', function () {
-      const bait = document.getElementById('adtest');
-      const isBlocked = bait && bait.offsetHeight === 0;
-
-      if (isBlocked) {
-        document.body.innerHTML = "<h1>Adblocker Detected — Access Restricted</h1>";
-      }
-    });
-  </script>
-
-</body>
+<html>
+  <head>
+    <title>Redirecting...</title>
+    <script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      window.location.href = "https://your-real-url.com";
+    </script>
+  </head>
+  <body>
+    Redirecting...
+  </body>
 </html>
