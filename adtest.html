@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ad Test Page</title>
+
+  <!-- FAKE Ad script (will trigger adblockers) -->
+  <script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script src="/ads/script.js"></script>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f7f7f7;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .ad-banner, .ad-container, .sponsor-box {
+      width: 300px;
+      height: 250px;
+      background: #ddd;
+      margin: 1rem auto;
+      border: 2px dashed #999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    #adtest {
+      width: 1px;
+      height: 1px;
+      visibility: hidden;
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>This is a Test Page for Adblockers</h1>
+
+  <!-- Bait Ad Elements -->
+  <div class="ad-banner">Ad Banner 1</div>
+  <div class="ad-container">Ad Container 2</div>
+  <div class="sponsor-box">Sponsored Content</div>
+
+  <!-- Invisible bait div -->
+  <div id="adtest" class="adsbox"></div>
+
+  <script>
+    // Adblock detection logic
+    window.addEventListener('load', function () {
+      const bait = document.getElementById('adtest');
+      const isBlocked = bait && bait.offsetHeight === 0;
+
+      if (isBlocked) {
+        alert("Adblocker Detected! Some content may be hidden.");
+        // Or redirect:
+        // window.location.href = "/adblock-warning.html";
+      }
+    });
+  </script>
+
+</body>
+</html>
