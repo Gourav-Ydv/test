@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DNS AdBlock Detection (Fixed)</title>
+  <title>DNS AdBlock Detection (Using JavaScript File)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -45,19 +45,21 @@
 
   <script>
     function detectDNSAdBlocker(callback) {
-      const bait = new Image();
-      // Force cache busting by appending a random query parameter with a unique timestamp
-      bait.src = "https://tpc.googlesyndication.com/simgad/7067107348729833176?t=" + Math.random();
+      const xhr = new XMLHttpRequest();
+      // Try to load a known JavaScript resource from an ad network
+      xhr.open("GET", "https://securepubads.g.doubleclick.net/tag/js/gpt.js", true);
 
-      // Image load event: if successful, the ad is not blocked
-      bait.onload = () => {
-        callback(false);  // DNS blocking is not active
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          callback(false); // If it loads successfully, no DNS blocking
+        }
       };
 
-      // Image error event: if it fails, assume DNS-level blocking
-      bait.onerror = () => {
-        callback(true);  // DNS blocking is active
+      xhr.onerror = () => {
+        callback(true); // If it fails to load, DNS blocking is likely
       };
+
+      xhr.send();
     }
 
     function showAdBlockMessage() {
@@ -65,7 +67,7 @@
       msg.style.display = "block";
     }
 
-    // Run the initial detection when the page loads
+    // Run the detection when the page loads
     window.addEventListener("load", () => {
       setTimeout(() => {
         detectDNSAdBlocker((isBlocked) => {
