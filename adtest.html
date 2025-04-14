@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DNS AdBlock Detection (Using JavaScript File)</title>
+  <title>DNS AdBlock Detection (Always on Reload)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -44,31 +44,34 @@
   </div>
 
   <script>
+    // Function to detect DNS ad blocker
     function detectDNSAdBlocker(callback) {
       const xhr = new XMLHttpRequest();
-      // Try to load a known JavaScript resource from an ad network
+      // Use a known ad script URL from a major ad service (Google DoubleClick)
       xhr.open("GET", "https://securepubads.g.doubleclick.net/tag/js/gpt.js", true);
 
       xhr.onload = () => {
         if (xhr.status === 200) {
-          callback(false); // If it loads successfully, no DNS blocking
+          callback(false); // No blocking: DNS-level blocking is not active
         }
       };
 
       xhr.onerror = () => {
-        callback(true); // If it fails to load, DNS blocking is likely
+        callback(true); // Blocked: DNS-level blocking is active
       };
 
       xhr.send();
     }
 
+    // Function to show the adblock warning message
     function showAdBlockMessage() {
       const msg = document.getElementById("adblock-message");
       msg.style.display = "block";
     }
 
-    // Run the detection when the page loads
+    // Run detection on every page reload or refresh
     window.addEventListener("load", () => {
+      // Perform the detection immediately on page load
       setTimeout(() => {
         detectDNSAdBlocker((isBlocked) => {
           if (isBlocked) {
@@ -77,14 +80,14 @@
         });
       }, 300); // Delay added to ensure the page has fully loaded
 
-      // Recheck after a longer delay to handle DNS changes dynamically
+      // Recheck DNS status again after a few seconds in case it changes dynamically
       setTimeout(() => {
         detectDNSAdBlocker((isBlocked) => {
           if (isBlocked) {
             showAdBlockMessage();
           }
         });
-      }, 5000); // Recheck after 5 seconds to ensure DNS changes are reflected
+      }, 5000); // Recheck after 5 seconds to handle DNS changes
     });
   </script>
 
