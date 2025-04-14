@@ -41,22 +41,21 @@
   <div class="content">
     <h1>Welcome to Our Website</h1>
     <p>This is a sample page. If you're using DNS-level ad blocking, a message will appear.</p>
-  </div><script>
+  </div>
+  <script>
   function detectDNSAdBlocker(callback) {
     const bait = new Image();
     bait.src = "https://tpc.googlesyndication.com/simgad/7067107348729833176?t=" + Date.now();
 
+    // Check if image was successfully loaded
     bait.onload = () => {
-      // Legitimate ad image should be large (300x250)
-      if (bait.width < 100 || bait.height < 100) {
-        callback(true); // Image was blocked or replaced
-      } else {
-        callback(false); // Image loaded correctly
-      }
+      // If the image is loaded, we know it's not being blocked
+      callback(false);
     };
 
+    // If there's an error (like DNS blocking), we assume it's blocked
     bait.onerror = () => {
-      callback(true); // Image completely blocked
+      callback(true);
     };
   }
 
@@ -72,9 +71,10 @@
           showAdBlockMessage();
         }
       });
-    }, 200);
+    }, 200); // Delay to make sure page is fully loaded
   });
 </script>
+
 
 
 
