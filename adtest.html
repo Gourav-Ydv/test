@@ -46,18 +46,17 @@
   <script>
     function detectDNSAdBlocker(callback) {
       const bait = new Image();
-      // Unique timestamp appended to avoid browser caching
+      // Force cache busting by appending a unique timestamp
       bait.src = "https://tpc.googlesyndication.com/simgad/7067107348729833176?t=" + Date.now();
 
       // Image load event: if successful, the ad is not blocked
       bait.onload = () => {
-        // If the image loads without issues, it’s not blocked
-        callback(false);
+        callback(false);  // DNS blocking is not active
       };
 
       // Image error event: if it fails, assume DNS-level blocking
       bait.onerror = () => {
-        callback(true);  // Indicates DNS-level blocking
+        callback(true);  // DNS blocking is active
       };
     }
 
@@ -66,7 +65,7 @@
       msg.style.display = "block";
     }
 
-    // Wait for the page to fully load before starting the check
+    // Run the initial detection when the page loads
     window.addEventListener("load", () => {
       setTimeout(() => {
         detectDNSAdBlocker((isBlocked) => {
@@ -74,7 +73,16 @@
             showAdBlockMessage();
           }
         });
-      }, 300); // Delay added to ensure the page has loaded
+      }, 300); // Delay added to ensure the page has fully loaded
+
+      // Recheck after a short delay to handle DNS changes dynamically
+      setTimeout(() => {
+        detectDNSAdBlocker((isBlocked) => {
+          if (isBlocked) {
+            showAdBlockMessage();
+          }
+        });
+      }, 2000); // Recheck after 2 seconds
     });
   </script>
 
