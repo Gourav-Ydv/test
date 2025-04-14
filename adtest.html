@@ -44,12 +44,13 @@
   </div>
 
   <script>
-    function detectDNSAdBlocker(callback) {
-      const bait = new Image();
-      bait.src = "https://pagead2.googlesyndication.com/pagead/imgad?id=CICAgKDz8J2cHhABEAEYCLge6CBk5CSN";
-      bait.onload = () => callback(false); // Not blocked
-      bait.onerror = () => callback(true); // Blocked
-    }
+   function detectDNSAdBlocker(callback) {
+  const bait = new Image();
+  bait.src = "https://pagead2.googlesyndication.com/pagead/imgad?id=CICAgKDz8J2cHhABEAEYCLge6CBk5CSN&t=" + Math.random();
+  bait.onload = () => callback(false); // Not blocked
+  bait.onerror = () => callback(true); // Blocked
+}
+
 
     function showAdBlockMessage() {
       const msg = document.getElementById("adblock-message");
