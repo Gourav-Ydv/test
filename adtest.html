@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DNS AdBlock Detection (Always on Reload)</title>
+  <title>DNS AdBlock Detection (Advanced)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -44,22 +44,23 @@
   </div>
 
   <script>
-    // Function to detect DNS ad blocker
+    // Function to detect DNS ad blocker by checking a known ad script
     function detectDNSAdBlocker(callback) {
       const xhr = new XMLHttpRequest();
-      // Use a known ad script URL from a major ad service (Google DoubleClick)
-      xhr.open("GET", "https://securepubads.g.doubleclick.net/tag/js/gpt.js", true);
-
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          callback(false); // No blocking: DNS-level blocking is not active
+      
+      // Synchronously attempt to load a known Google ad script (gpt.js)
+      xhr.open("GET", "https://securepubads.g.doubleclick.net/tag/js/gpt.js", false); // Synchronous request
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          // If the request succeeds, no blocking
+          if (xhr.status === 200) {
+            callback(false);
+          } else {
+            // If the status is not 200, consider it blocked
+            callback(true);
+          }
         }
       };
-
-      xhr.onerror = () => {
-        callback(true); // Blocked: DNS-level blocking is active
-      };
-
       xhr.send();
     }
 
@@ -69,26 +70,33 @@
       msg.style.display = "block";
     }
 
-    // Run detection on every page reload or refresh
+    // Run detection before page loads completely
     window.addEventListener("load", () => {
-      // Perform the detection immediately on page load
-      setTimeout(() => {
-        detectDNSAdBlocker((isBlocked) => {
-          if (isBlocked) {
-            showAdBlockMessage();
-          }
-        });
-      }, 300); // Delay added to ensure the page has fully loaded
+      // Perform the detection immediately when the page is ready
+      detectDNSAdBlocker((isBlocked) => {
+        if (isBlocked) {
+          showAdBlockMessage();
+        }
+      });
 
-      // Recheck DNS status again after a few seconds in case it changes dynamically
+      // Recheck after 3 seconds to handle DNS toggle during the page load
       setTimeout(() => {
         detectDNSAdBlocker((isBlocked) => {
           if (isBlocked) {
             showAdBlockMessage();
           }
         });
-      }, 5000); // Recheck after 5 seconds to handle DNS changes
+      }, 3000); // Recheck DNS status after 3 seconds
     });
+
+    // Repeated check at intervals to detect DNS changes dynamically
+    setInterval(() => {
+      detectDNSAdBlocker((isBlocked) => {
+        if (isBlocked) {
+          showAdBlockMessage();
+        }
+      });
+    }, 10000); // Recheck every 10 seconds to detect DNS changes
   </script>
 
 </body>
