@@ -42,41 +42,41 @@
     <h1>Welcome to Our Website</h1>
     <p>This is a sample page. If you're using DNS-level ad blocking, a message will appear.</p>
   </div>
+
   <script>
-  function detectDNSAdBlocker(callback) {
-    const bait = new Image();
-    bait.src = "https://tpc.googlesyndication.com/simgad/7067107348729833176?t=" + Date.now();
+    function detectDNSAdBlocker(callback) {
+      const bait = new Image();
+      // Unique timestamp appended to avoid browser caching
+      bait.src = "https://tpc.googlesyndication.com/simgad/7067107348729833176?t=" + Date.now();
 
-    // Check if image was successfully loaded
-    bait.onload = () => {
-      // If the image is loaded, we know it's not being blocked
-      callback(false);
-    };
+      // Image load event: if successful, the ad is not blocked
+      bait.onload = () => {
+        // If the image loads without issues, it’s not blocked
+        callback(false);
+      };
 
-    // If there's an error (like DNS blocking), we assume it's blocked
-    bait.onerror = () => {
-      callback(true);
-    };
-  }
+      // Image error event: if it fails, assume DNS-level blocking
+      bait.onerror = () => {
+        callback(true);  // Indicates DNS-level blocking
+      };
+    }
 
-  function showAdBlockMessage() {
-    const msg = document.getElementById("adblock-message");
-    msg.style.display = "block";
-  }
+    function showAdBlockMessage() {
+      const msg = document.getElementById("adblock-message");
+      msg.style.display = "block";
+    }
 
-  window.addEventListener("load", () => {
-    setTimeout(() => {
-      detectDNSAdBlocker((isBlocked) => {
-        if (isBlocked) {
-          showAdBlockMessage();
-        }
-      });
-    }, 200); // Delay to make sure page is fully loaded
-  });
-</script>
-
-
-
+    // Wait for the page to fully load before starting the check
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        detectDNSAdBlocker((isBlocked) => {
+          if (isBlocked) {
+            showAdBlockMessage();
+          }
+        });
+      }, 300); // Delay added to ensure the page has loaded
+    });
+  </script>
 
 </body>
 </html>
