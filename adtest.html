@@ -46,8 +46,8 @@
   <script>
     function detectDNSAdBlocker(callback) {
       const bait = new Image();
-      // Force cache busting by appending a unique timestamp
-      bait.src = "https://tpc.googlesyndication.com/simgad/7067107348729833176?t=" + Date.now();
+      // Force cache busting by appending a random query parameter with a unique timestamp
+      bait.src = "https://tpc.googlesyndication.com/simgad/7067107348729833176?t=" + Math.random();
 
       // Image load event: if successful, the ad is not blocked
       bait.onload = () => {
@@ -75,14 +75,14 @@
         });
       }, 300); // Delay added to ensure the page has fully loaded
 
-      // Recheck after a short delay to handle DNS changes dynamically
+      // Recheck after a longer delay to handle DNS changes dynamically
       setTimeout(() => {
         detectDNSAdBlocker((isBlocked) => {
           if (isBlocked) {
             showAdBlockMessage();
           }
         });
-      }, 2000); // Recheck after 2 seconds
+      }, 5000); // Recheck after 5 seconds to ensure DNS changes are reflected
     });
   </script>
 
