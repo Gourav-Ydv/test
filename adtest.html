@@ -42,27 +42,41 @@
     <h1>Welcome to Our Website</h1>
     <p>This is a sample page. If you're using DNS-level ad blocking, a message will appear.</p>
   </div>
+<script>
+  function detectDNSAdBlocker(callback) {
+    const bait = new Image();
+    bait.src = "https://pagead2.googlesyndication.com/pagead/imgad?id=CICAgKDz8J2cHhABEAEYCLge6CBk5CSN&t=" + Date.now();
 
-  <script>
-   function detectDNSAdBlocker(callback) {
-  const bait = new Image();
-  bait.src = "https://pagead2.googlesyndication.com/pagead/imgad?id=CICAgKDz8J2cHhABEAEYCLge6CBk5CSN&t=" + Math.random();
-  bait.onload = () => callback(false); // Not blocked
-  bait.onerror = () => callback(true); // Blocked
-}
-
-
-    function showAdBlockMessage() {
-      const msg = document.getElementById("adblock-message");
-      msg.style.display = "block";
-    }
-
-    detectDNSAdBlocker((isBlocked) => {
-      if (isBlocked) {
-        showAdBlockMessage();
+    bait.onload = () => {
+      // Some DNS blockers return 1x1 blank image (or 0x0)
+      if (bait.width < 5 || bait.height < 5) {
+        callback(true); // Blocked, fake image loaded
+      } else {
+        callback(false); // Real image loaded
       }
-    });
-  </script>
+    };
+
+    bait.onerror = () => {
+      callback(true); // Blocked (no response)
+    };
+  }
+
+  function showAdBlockMessage() {
+    const msg = document.getElementById("adblock-message");
+    msg.style.display = "block";
+  }
+
+  window.addEventListener("load", () => {
+    setTimeout(() => {
+      detectDNSAdBlocker((isBlocked) => {
+        if (isBlocked) {
+          showAdBlockMessage();
+        }
+      });
+    }, 200);
+  });
+</script>
+
 
 </body>
 </html>
