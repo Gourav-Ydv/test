@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DNS AdBlock Detection Demo</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DNS AdBlock Detection (Fixed)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -45,10 +45,10 @@
 
   <script>
     function detectDNSAdBlocker(callback) {
-      const testImg = new Image();
-      testImg.onload = () => callback(false); // Not blocked
-      testImg.onerror = () => callback(true); // Blocked
-      testImg.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?t=" + Date.now();
+      const bait = new Image();
+      bait.src = "https://pagead2.googlesyndication.com/pagead/imgad?id=CICAgKDz8J2cHhABEAEYCLge6CBk5CSN";
+      bait.onload = () => callback(false); // Not blocked
+      bait.onerror = () => callback(true); // Blocked
     }
 
     function showAdBlockMessage() {
