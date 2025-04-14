@@ -1,14 +1,67 @@
-<!-- adshort.glitch.me -->
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Redirecting...</title>
-    <script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script>
-      window.location.href = "https://your-real-url.com";
-    </script>
-  </head>
-  <body>
-    Redirecting...
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DNS AdBlock Detection Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    #adblock-message {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #fff3cd;
+      color: #856404;
+      border-bottom: 2px solid #ffeeba;
+      padding: 16px;
+      z-index: 9999;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .content {
+      padding: 60px 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="adblock-message">
+    🚫 We noticed you're using a DNS-level ad blocker (like AdGuard DNS).<br>
+    Please disable it for the best experience on our site. 🙏
+  </div>
+
+  <div class="content">
+    <h1>Welcome to Our Website</h1>
+    <p>This is a sample page. If you're using DNS-level ad blocking, a message will appear.</p>
+  </div>
+
+  <script>
+    function detectDNSAdBlocker(callback) {
+      const testImg = new Image();
+      testImg.onload = () => callback(false); // Not blocked
+      testImg.onerror = () => callback(true); // Blocked
+      testImg.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?t=" + Date.now();
+    }
+
+    function showAdBlockMessage() {
+      const msg = document.getElementById("adblock-message");
+      msg.style.display = "block";
+    }
+
+    detectDNSAdBlocker((isBlocked) => {
+      if (isBlocked) {
+        showAdBlockMessage();
+      }
+    });
+  </script>
+
+</body>
 </html>
